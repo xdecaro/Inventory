@@ -16,4 +16,4 @@ Use modern Joomla APIs, server-side ACL, CSRF for state-changing operations, val
 
 ## Releases
 
-Version 0.1.0 establishes the first technical baseline. Keep stable IDs `com_decaroinventory` and `pkg_decaroinventory`. Normal updates must preserve data and configuration.
+Version 0.1.0 establishes the first technical baseline. Keep stable IDs `com_xdecaroinventory` and `pkg_xdecaroinventory`. Normal updates must preserve data and configuration.
