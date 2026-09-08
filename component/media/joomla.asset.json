@@ -1,1 +1,1 @@
-{"$schema":"https://developer.joomla.org/schemas/json-schema/web_assets.json","name":"com_decaroinventory","version":"0.1.0","assets":[{"name":"com_decaroinventory.admin","type":"style","uri":"com_decaroinventory/css/admin.css"}]}
+{"$schema":"https://developer.joomla.org/schemas/json-schema/web_assets.json","name":"com_xdecaroinventory","version":"0.2.0","assets":[{"name":"com_xdecaroinventory.admin","type":"style","uri":"com_xdecaroinventory/css/admin.css"}]}
