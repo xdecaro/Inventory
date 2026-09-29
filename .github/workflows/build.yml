@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['8.1','8.3']
+        php: ['8.3','8.4']
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
@@ -38,11 +38,13 @@ jobs:
           ! grep -RniE '#__(dcl|decaroforms|decarocourses|decarodocuments|decaromembership|decaroevents|decarofinance|decaroprotocol|decarodraw|decaroorganizations|decaropeople)_' component --exclude-dir=.git
       - name: Verify technical identity
         run: |
-          test "$(cat VERSION)" = '0.3.0'
+          test "$(cat VERSION)" = '0.3.1'
           test -f component/xdecaroinventory.xml
           test -f package/pkg_xdecaroinventory.xml
           grep -Fq 'xdecaro\Component\Inventory' component/xdecaroinventory.xml
           grep -Fq '#__xdecaroinventory_' component/admin/sql/install.mysql.utf8mb4.sql
+          grep -Fq '<targetplatform name="joomla" version="6.*"/>' component/xdecaroinventory.xml
+          grep -Fq '<targetplatform name="joomla" version="6.*"/>' package/pkg_xdecaroinventory.xml
           ! grep -RInE 'com_decaroinventory|pkg_decaroinventory|#__decaroinventory_|Decaroinventory' component package build tests updates README.md
           ! grep -RIn 'Xdecaro\\' component package build tests updates README.md
       - name: Deterministic build
@@ -54,7 +56,7 @@ jobs:
           diff -u /tmp/sums dist/SHA256SUMS.txt
           for z in dist/*.zip; do unzip -t "$z" >/dev/null; done
       - uses: actions/upload-artifact@v4
-        if: matrix.php == '8.3'
+        if: matrix.php == '8.4'
         with:
           name: xdecaroinventory-${{ github.sha }}
           path: dist/
