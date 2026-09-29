@@ -30,6 +30,12 @@ jobs:
         run: |
           find component package tests -type f -name '*.php' -print0 | xargs -0 -n1 php -l
           php tests/core-integration-smoke.php
+          php tests/inventory-structure-smoke.php
+          php tests/acl-controller-smoke.php
+          php tests/items-regression-smoke.php
+          php tests/movement-service-smoke.php
+          php tests/dashboard-smoke.php
+          php tests/ui-language-smoke.php
           test -f component/xdecaroinventory.xml
           test -f package/pkg_xdecaroinventory.xml
           grep -Fq 'xdecaro\Component\Inventory' component/xdecaroinventory.xml
@@ -45,7 +51,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "v${VERSION}" dist/com_xdecaroinventory_${VERSION}.zip dist/pkg_xdecaroinventory_${VERSION}.zip dist/SHA256SUMS.txt --prerelease --title "Inventory by xdecaro ${VERSION}" --notes "Fresh prerelease technical baseline using com_xdecaroinventory, pkg_xdecaroinventory, xdecaro\\Component\\Inventory and #__xdecaroinventory_*; inventory domain ownership remains local."
+          gh release create "v${VERSION}" dist/com_xdecaroinventory_${VERSION}.zip dist/pkg_xdecaroinventory_${VERSION}.zip dist/SHA256SUMS.txt --prerelease --title "Inventory by xdecaro ${VERSION}" --notes "Inventory 0.3.0 adds item management, append-only transactional movements, live dashboard, dedicated ACL/CSRF checks and responsive administration UI."
       - name: Publish package checksum
         run: |
           export PACKAGE_SHA="$(sha256sum "dist/pkg_xdecaroinventory_${VERSION}.zip" | awk '{print $1}')"
