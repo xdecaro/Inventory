@@ -16,16 +16,16 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: none
-      - name: Validate PHP and Core boundary
+      - name: Validate PHP and Inventory behavior
         run: |
           find component package tests -type f -name '*.php' -print0 | xargs -0 -n1 php -l
           php tests/core-integration-smoke.php
           php tests/inventory-structure-smoke.php
-          if [ -f tests/acl-controller-smoke.php ]; then php tests/acl-controller-smoke.php; fi
-          if [ -f tests/items-regression-smoke.php ]; then php tests/items-regression-smoke.php; fi
-          if [ -f tests/movement-service-smoke.php ]; then php tests/movement-service-smoke.php; fi
-          if [ -f tests/dashboard-smoke.php ]; then php tests/dashboard-smoke.php; fi
-          if [ -f tests/ui-language-smoke.php ]; then php tests/ui-language-smoke.php; fi
+          php tests/acl-controller-smoke.php
+          php tests/items-regression-smoke.php
+          php tests/movement-service-smoke.php
+          php tests/dashboard-smoke.php
+          php tests/ui-language-smoke.php
       - name: Validate XML
         run: |
           python3 - <<'PY'
