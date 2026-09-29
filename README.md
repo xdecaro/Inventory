@@ -8,16 +8,18 @@ Joomla component for physical inventory and stock-domain data in the xdecaro eco
 - Package: `pkg_xdecaroinventory`
 - PHP namespace: `xdecaro\Component\Inventory`
 - Database tables: `#__xdecaroinventory_*`
-- Current prerelease line: `0.3.1`
+- Current prerelease line: `0.3.2`
 - Platform: **Joomla 6 only**
 - Runtime baseline: Joomla 6.1.3
 - PHP minimum: 8.3
 
 The vendor namespace is intentionally lowercase: `xdecaro`.
 
-## Inventory 0.3.1
+## Inventory 0.3.2
 
-Inventory 0.3.1 keeps the functional Inventory 0.3 baseline and makes the supported platform explicit: Joomla 6 only. Joomla 5 is no longer declared or tested as a supported target.
+Inventory 0.3.2 fixes an upgrade-path defect found during real Joomla 6.1.3 testing: an installation that already had Inventory registered but was missing the base Inventory tables could remain broken because the previous 0.3.0/0.3.1 update SQL files did not recreate them.
+
+The 0.3.2 migration is self-healing and non-destructive. It uses `CREATE TABLE IF NOT EXISTS` for `#__xdecaroinventory_items` and `#__xdecaroinventory_movements`, preserving any existing tables and data while creating whichever base tables are missing.
 
 The functional baseline includes:
 
@@ -30,7 +32,5 @@ The functional baseline includes:
 - dedicated ACL and CSRF checks;
 - responsive light/dark compatible administration UI;
 - Italian and English language strings.
-
-The 0.2.0 data model is preserved: `#__xdecaroinventory_items.quantity` remains the current balance and `#__xdecaroinventory_movements` remains the movement ledger. The 0.3.1 update introduces no destructive schema change.
 
 Inventory owns catalogued physical items, stock quantities and inventory movements. Resources owns allocatable resources, Bookings owns reservations and Finance owns accounting. Integration with other xdecaro products must use public contracts; Inventory must not read or write another product's private tables.
