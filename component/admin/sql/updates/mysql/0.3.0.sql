@@ -1,0 +1,2 @@
+-- Inventory 0.3.0 keeps the 0.2.0 schema intact.
+-- Functional views and transactional movement handling require no destructive migration.
