@@ -4,4 +4,5 @@ $root=dirname(__DIR__);
 function m(bool $ok,string $msg):void{if(!$ok){fwrite(STDERR,"FAIL: $msg\n");exit(1);}}
 $p=$root.'/component/admin/src/Service/MovementService.php';m(is_file($p),'MovementService missing');$s=@file_get_contents($p)?:'';foreach(['transactionStart','affectedRows','transactionCommit','transactionRollback','quantity_delta','#__xdecaroinventory_movements','#__xdecaroinventory_items'] as$x)m(str_contains($s,$x),"missing $x");m(str_contains($s,'affectedRows')&&str_contains($s,'>= 0'),'atomic negative-stock guard missing');
 $c=@file_get_contents($root.'/component/admin/src/Controller/MovementController.php')?:'';m(str_contains($c,'MovementService'),'controller must use MovementService');m(!str_contains($c,'items.quantity'),'controller updates stock directly');
+$list=@file_get_contents($root.'/component/admin/src/Model/MovementsModel.php')?:'';m(!str_contains($list,'$this->getApplication()'),'MovementsModel must not call undefined ListModel::getApplication()');m(str_contains($list,'Factory::getApplication()'),'MovementsModel must use Joomla application accessor');
 echo "PASS movement-service-smoke\n";
