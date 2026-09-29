@@ -38,11 +38,14 @@ jobs:
           ! grep -RniE '#__(dcl|decaroforms|decarocourses|decarodocuments|decaromembership|decaroevents|decarofinance|decaroprotocol|decarodraw|decaroorganizations|decaropeople)_' component --exclude-dir=.git
       - name: Verify technical identity
         run: |
-          test "$(cat VERSION)" = '0.3.1'
+          test "$(cat VERSION)" = '0.3.2'
           test -f component/xdecaroinventory.xml
           test -f package/pkg_xdecaroinventory.xml
+          test -f component/admin/sql/updates/mysql/0.3.2.sql
           grep -Fq 'xdecaro\Component\Inventory' component/xdecaroinventory.xml
           grep -Fq '#__xdecaroinventory_' component/admin/sql/install.mysql.utf8mb4.sql
+          grep -Fq 'CREATE TABLE IF NOT EXISTS `#__xdecaroinventory_items`' component/admin/sql/updates/mysql/0.3.2.sql
+          grep -Fq 'CREATE TABLE IF NOT EXISTS `#__xdecaroinventory_movements`' component/admin/sql/updates/mysql/0.3.2.sql
           grep -Fq '<targetplatform name="joomla" version="6.*"/>' component/xdecaroinventory.xml
           grep -Fq '<targetplatform name="joomla" version="6.*"/>' package/pkg_xdecaroinventory.xml
           ! grep -RInE 'com_decaroinventory|pkg_decaroinventory|#__decaroinventory_|Decaroinventory' component package build tests updates README.md
