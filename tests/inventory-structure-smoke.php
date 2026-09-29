@@ -36,7 +36,10 @@ $repair = is_file($repairPath) ? (string) file_get_contents($repairPath) : '';
 foreach (['#__xdecaroinventory_items', '#__xdecaroinventory_movements'] as $table) {
     expectTrue(str_contains($repair, 'CREATE TABLE IF NOT EXISTS `' . $table . '`'), 'repair update must create missing table ' . $table);
 }
-expectTrue(str_contains($repair, 'FOREIGN KEY (`item_id`) REFERENCES `#__xdecaroinventory_items`(`id`)'), 'movement foreign key missing from repair update');
+expectTrue(
+    preg_match('/FOREIGN\s+KEY\s*\(`item_id`\)\s+REFERENCES\s+`#__xdecaroinventory_items`\s*\(`id`\)/i', $repair) === 1,
+    'movement foreign key missing from repair update'
+);
 
 $sqlFiles = glob($root . '/component/admin/sql/**/*.sql') ?: [];
 $sqlFiles = array_merge($sqlFiles, glob($root . '/component/admin/sql/updates/mysql/*.sql') ?: []);
