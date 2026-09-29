@@ -1,0 +1,2 @@
+-- Inventory 0.3.1
+-- Compatibility release: Joomla 6 only. No database schema changes.
