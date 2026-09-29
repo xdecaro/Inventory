@@ -20,6 +20,12 @@ jobs:
         run: |
           find component package tests -type f -name '*.php' -print0 | xargs -0 -n1 php -l
           php tests/core-integration-smoke.php
+          php tests/inventory-structure-smoke.php
+          if [ -f tests/acl-controller-smoke.php ]; then php tests/acl-controller-smoke.php; fi
+          if [ -f tests/items-regression-smoke.php ]; then php tests/items-regression-smoke.php; fi
+          if [ -f tests/movement-service-smoke.php ]; then php tests/movement-service-smoke.php; fi
+          if [ -f tests/dashboard-smoke.php ]; then php tests/dashboard-smoke.php; fi
+          if [ -f tests/ui-language-smoke.php ]; then php tests/ui-language-smoke.php; fi
       - name: Validate XML
         run: |
           python3 - <<'PY'
@@ -32,7 +38,7 @@ jobs:
           ! grep -RniE '#__(dcl|decaroforms|decarocourses|decarodocuments|decaromembership|decaroevents|decarofinance|decaroprotocol|decarodraw|decaroorganizations|decaropeople)_' component --exclude-dir=.git
       - name: Verify technical identity
         run: |
-          test "$(cat VERSION)" = '0.2.0'
+          test "$(cat VERSION)" = '0.3.0'
           test -f component/xdecaroinventory.xml
           test -f package/pkg_xdecaroinventory.xml
           grep -Fq 'xdecaro\Component\Inventory' component/xdecaroinventory.xml
