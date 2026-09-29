@@ -9,17 +9,19 @@ function expectTrue(bool $condition, string $message): void {
     }
 }
 
-expectTrue(trim((string) file_get_contents($root . '/VERSION')) === '0.3.0', 'VERSION must be 0.3.0');
+expectTrue(trim((string) file_get_contents($root . '/VERSION')) === '0.3.1', 'VERSION must be 0.3.1');
 $component = (string) file_get_contents($root . '/component/xdecaroinventory.xml');
 $package = (string) file_get_contents($root . '/package/pkg_xdecaroinventory.xml');
 $updates = (string) file_get_contents($root . '/updates/pkg_xdecaroinventory.xml');
 $readme = (string) file_get_contents($root . '/README.md');
 
-expectTrue(str_contains($component, '<version>0.3.0</version>'), 'component manifest version');
-expectTrue(str_contains($package, '<version>0.3.0</version>'), 'package manifest version');
+expectTrue(str_contains($component, '<version>0.3.1</version>'), 'component manifest version');
+expectTrue(str_contains($package, '<version>0.3.1</version>'), 'package manifest version');
+expectTrue(str_contains($updates, '<version>0.3.1</version>'), 'update server version');
 expectTrue(str_contains($component, '<targetplatform name="joomla" version="6.*"/>'), 'component must target Joomla 6 only');
 expectTrue(str_contains($package, '<targetplatform name="joomla" version="6.*"/>'), 'package must target Joomla 6 only');
 expectTrue(str_contains($updates, '<targetplatform name="joomla" version="6\\.[0-9]+"/>'), 'update server must target Joomla 6 only');
+expectTrue(str_contains($updates, '<php_minimum>8.3.0</php_minimum>'), 'Joomla 6 requires PHP 8.3 minimum');
 expectTrue(!str_contains($component, '(5|6)'), 'component still declares Joomla 5 compatibility');
 expectTrue(!str_contains($package, '(5|6)'), 'package still declares Joomla 5 compatibility');
 expectTrue(!str_contains($updates, '(5|6)'), 'update server still declares Joomla 5 compatibility');
@@ -27,7 +29,7 @@ expectTrue(str_contains($readme, 'Joomla 6 only'), 'README must declare Joomla 6
 expectTrue(str_contains($component, 'view="items"'), 'items submenu missing');
 expectTrue(str_contains($component, 'view="movements"'), 'movements submenu missing');
 expectTrue(str_contains($component, 'xdecaro\\Component\\Inventory'), 'lowercase xdecaro namespace missing');
-expectTrue(is_file($root . '/component/admin/sql/updates/mysql/0.3.0.sql'), '0.3.0 SQL update missing');
+expectTrue(is_file($root . '/component/admin/sql/updates/mysql/0.3.1.sql'), '0.3.1 SQL update marker missing');
 
 $sqlFiles = glob($root . '/component/admin/sql/**/*.sql') ?: [];
 $sqlFiles = array_merge($sqlFiles, glob($root . '/component/admin/sql/updates/mysql/*.sql') ?: []);
