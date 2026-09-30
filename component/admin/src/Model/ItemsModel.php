@@ -34,8 +34,11 @@ final class ItemsModel extends ListModel
         $search = trim((string) $this->getState('filter.search'));
         if ($search !== '') {
             $search = '%' . str_replace(' ', '%', $search) . '%';
-            $q->where('(' . $db->quoteName('name') . ' LIKE :search OR ' . $db->quoteName('sku') . ' LIKE :search)')
-                ->bind(':search', $search, ParameterType::STRING);
+            $searchName = $search;
+            $searchSku = $search;
+            $q->where('(' . $db->quoteName('name') . ' LIKE :search_name OR ' . $db->quoteName('sku') . ' LIKE :search_sku)')
+                ->bind(':search_name', $searchName, ParameterType::STRING)
+                ->bind(':search_sku', $searchSku, ParameterType::STRING);
         }
 
         $type = (string) $this->getState('filter.item_type');
