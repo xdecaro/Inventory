@@ -1,6 +1,7 @@
 <?php
 namespace xdecaro\Component\Inventory\Administrator\View\Items;
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
@@ -13,9 +14,16 @@ final class HtmlView extends BaseHtmlView
     public $state;
     public $filterForm;
     public $activeFilters;
+    public bool $canManageItems = false;
 
     public function display($tpl = null): void
     {
+        $app = Factory::getApplication();
+
+        if (!$app->getIdentity()->authorise('core.manage', 'com_xdecaroinventory')) {
+            throw new \RuntimeException(Text::_('JERROR_ALERTNOAUTHOR'), 403);
+        }
+
         $this->items = $this->get('Items');
         $this->pagination = $this->get('Pagination');
         $this->state = $this->get('State');
@@ -26,16 +34,13 @@ final class HtmlView extends BaseHtmlView
             throw new \RuntimeException(implode("\n", $errors));
         }
 
-        $app = Factory::getApplication();
-
+        $this->canManageItems = $app->getIdentity()->authorise('inventory.items.manage', 'com_xdecaroinventory');
         ToolbarHelper::title(Text::_('COM_XDECAROINVENTORY_ITEMS'), 'archive');
-        if ($app->getIdentity()->authorise('inventory.items.manage', 'com_xdecaroinventory')) {
+        if ($this->canManageItems) {
             ToolbarHelper::addNew('item.add');
         }
 
-        $wa = $app->getDocument()->getWebAssetManager();
-        $wa->getRegistry()->addExtensionRegistryFile('com_xdecaroinventory');
-        $wa->useStyle('com_xdecaroinventory.admin');
+        $this->document->getWebAssetManager()->useStyle('com_xdecaroinventory.admin');
 
         parent::display($tpl);
     }
