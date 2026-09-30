@@ -14,6 +14,8 @@ final class HtmlView extends BaseHtmlView
     public bool $coreUiActive = false;
     public string $coreVersion = '';
     public string $componentVersion = '';
+    public bool $canManageItems = false;
+    public bool $canCreateMovement = false;
     public array $summary = [];
 
     public function display($tpl = null): void
@@ -24,13 +26,15 @@ final class HtmlView extends BaseHtmlView
             throw new \RuntimeException(Text::_('JERROR_ALERTNOAUTHOR'), 403);
         }
 
+        $identity = $app->getIdentity();
+        $this->canManageItems = $identity->authorise('inventory.items.manage', 'com_xdecaroinventory');
+        $this->canCreateMovement = $identity->authorise('inventory.movements.create', 'com_xdecaroinventory');
         $this->summary = $this->getModel()->getSummary();
         $this->componentVersion = $this->getInstalledVersion();
 
         ToolbarHelper::title(Text::_('COM_XDECAROINVENTORY'), 'archive');
 
-        $wa = $app->getDocument()->getWebAssetManager();
-        $wa->getRegistry()->addExtensionRegistryFile('com_xdecaroinventory');
+        $wa = $this->document->getWebAssetManager();
 
         try {
             $core = Factory::getContainer()->get(CoreIntegrationService::class);
