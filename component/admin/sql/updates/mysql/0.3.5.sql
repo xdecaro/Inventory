@@ -1,0 +1,2 @@
+-- Inventory 0.3.5
+-- Joomla 6 runtime routing, ACL, asset and validation stabilization; no database schema changes.
