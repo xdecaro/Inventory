@@ -1,2 +1,66 @@
 <?php
-defined('_JEXEC') or die; use Joomla\CMS\Factory; use Joomla\Database\DatabaseInterface; final class PkgInventoryInstallerScript { private const MINIMUM_CORE='1.1.0'; public function preflight($type,$parent): bool { if($type==='uninstall') return true; $v=$this->getInstalledCoreVersion(); if($v!==''&&version_compare($v,self::MINIMUM_CORE,'>=')) return true; Factory::getApplication()->enqueueMessage('Inventory by xdecaro requires Core by xdecaro '.self::MINIMUM_CORE.' or later.','error'); return false; } private function getInstalledCoreVersion(): string { if(class_exists(\xdecaro\Core\Version::class)) return trim((string)\xdecaro\Core\Version::VERSION); try{$db=Factory::getContainer()->get(DatabaseInterface::class);$q=$db->getQuery(true)->select($db->quoteName('manifest_cache'))->from($db->quoteName('#__extensions'))->where($db->quoteName('type').' = '.$db->quote('package'))->where($db->quoteName('element').' = '.$db->quote('pkg_xdecarocore'));$c=(string)$db->setQuery($q,0,1)->loadResult();$m=json_decode($c,true);return is_array($m)?trim((string)($m['version']??'')):'';}catch(\Throwable){return '';} } }
+defined('_JEXEC') or die;
+
+use Joomla\CMS\Factory;
+use Joomla\Database\DatabaseInterface;
+
+final class PkgInventoryInstallerScript
+{
+    private const MINIMUM_CORE = '1.1.0';
+
+    public function preflight($type, $parent): bool
+    {
+        if ($type === 'uninstall') {
+            return true;
+        }
+
+        $version = $this->getInstalledCoreVersion();
+        if ($version !== '' && version_compare($version, self::MINIMUM_CORE, '>=')) {
+            return true;
+        }
+
+        Factory::getApplication()->enqueueMessage(
+            'Inventory by xdecaro requires Core by xdecaro ' . self::MINIMUM_CORE . ' or later.',
+            'error'
+        );
+
+        return false;
+    }
+
+    private function getInstalledCoreVersion(): string
+    {
+        if (class_exists(\xdecaro\Core\Version::class)) {
+            return trim((string) \xdecaro\Core\Version::VERSION);
+        }
+
+        $candidates = [
+            ['library', 'xdecaro/core'],
+            ['component', 'com_xdecarocore'],
+            ['package', 'pkg_xdecarocore'],
+            ['package', 'pkg_core'],
+        ];
+
+        try {
+            $db = Factory::getContainer()->get(DatabaseInterface::class);
+
+            foreach ($candidates as [$type, $element]) {
+                $query = $db->getQuery(true)
+                    ->select($db->quoteName('manifest_cache'))
+                    ->from($db->quoteName('#__extensions'))
+                    ->where($db->quoteName('type') . ' = ' . $db->quote($type))
+                    ->where($db->quoteName('element') . ' = ' . $db->quote($element));
+
+                $cache = (string) $db->setQuery($query, 0, 1)->loadResult();
+                $manifest = json_decode($cache, true);
+                $version = is_array($manifest) ? trim((string) ($manifest['version'] ?? '')) : '';
+
+                if ($version !== '') {
+                    return $version;
+                }
+            }
+        } catch (\Throwable) {
+        }
+
+        return '';
+    }
+}
