@@ -6,7 +6,12 @@ $css=@file_get_contents($root.'/component/media/css/admin.css')?:'';
 u(str_contains($css,'@media'),'responsive CSS missing');
 u(str_contains($css,'var('),'theme variables missing');
 foreach(['items/default.php','movements/default.php','dashboard/default.php'] as$f){$s=@file_get_contents($root.'/component/admin/tmpl/'.$f)?:'';u(str_contains($s,'Text::_('),"language usage missing in $f");}
-foreach(['Item','Movement'] as$view){$s=@file_get_contents($root.'/component/admin/src/View/'.$view.'/HtmlView.php')?:'';u(str_contains($s,"useStyle('com_xdecaroinventory.admin')"),"admin asset missing in $view form view");}
+foreach(['Items','Item','Movements','Movement'] as$view){
+    $s=@file_get_contents($root.'/component/admin/src/View/'.$view.'/HtmlView.php')?:'';
+    u(str_contains($s,"useStyle('com_xdecaroinventory.admin')"),"admin asset missing in $view view");
+    u(!str_contains($s,"getRegistry()->addExtensionRegistryFile('com_xdecaroinventory')->useStyle"),"$view incorrectly calls useStyle() on WebAssetRegistry");
+    u(str_contains($s,"getWebAssetManager()"),"$view WebAssetManager missing");
+}
 $movementTable=@file_get_contents($root.'/component/admin/src/Table/MovementTable.php')?:'';
 u(!str_contains($movementTable,"'Inventory movement history is append-only.'"),'hardcoded append-only error');
 u(str_contains($movementTable,'Text::_('),'translated append-only error missing');
