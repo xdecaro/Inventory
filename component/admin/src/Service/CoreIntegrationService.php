@@ -3,6 +3,7 @@ namespace xdecaro\Component\Inventory\Administrator\Service;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Extension\ExtensionHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\WebAsset\WebAssetManager;
 
 final class CoreIntegrationService
@@ -16,7 +17,14 @@ final class CoreIntegrationService
             return trim((string) \xdecaro\Core\Version::VERSION);
         }
 
-        foreach ([['xdecaro/core', 'library'], ['pkg_xdecarocore', 'package']] as [$element, $type]) {
+        $candidates = [
+            ['xdecaro/core', 'library'],
+            ['com_xdecarocore', 'component'],
+            ['pkg_xdecarocore', 'package'],
+            ['pkg_core', 'package'],
+        ];
+
+        foreach ($candidates as [$element, $type]) {
             try {
                 $record = ExtensionHelper::getExtensionRecord($element, $type);
                 if (!$record) {
@@ -58,7 +66,7 @@ final class CoreIntegrationService
     public function createEntityReference(int|string $id): object
     {
         if (!$this->isReferenceApiAvailable()) {
-            throw new \RuntimeException('Core by xdecaro reference API is unavailable.');
+            throw new \RuntimeException(Text::_('COM_XDECAROINVENTORY_ERROR_CORE_REFERENCE_UNAVAILABLE'));
         }
 
         return new \xdecaro\Core\Integration\EntityReference(self::COMPONENT, 'item', $id);
