@@ -8,18 +8,31 @@ Joomla component for physical inventory and stock-domain data in the xdecaro eco
 - Package: `pkg_xdecaroinventory`
 - PHP namespace: `xdecaro\Component\Inventory`
 - Database tables: `#__xdecaroinventory_*`
-- Current prerelease line: `0.3.4`
+- Current prerelease line: `0.3.5`
 - Platform: **Joomla 6 only**
-- Runtime baseline: Joomla 6.1.3
+- Runtime baseline: Joomla 6.1.4
 - PHP minimum: 8.3
 
 The vendor namespace is intentionally lowercase: `xdecaro`.
 
-## Inventory 0.3.4
+## Inventory 0.3.5
 
-Inventory 0.3.4 fixes a Joomla 6 Web Asset Manager runtime defect found during real testing. The Items, Item, Movements and Movement views previously chained `useStyle()` from `WebAssetRegistry`; Joomla 6 exposes `useStyle()` on `WebAssetManager`. All four views now register the component asset registry file and then enable `com_xdecaroinventory.admin` through the Web Asset Manager.
+Inventory 0.3.5 is a runtime-stabilization patch driven by real Joomla 6 testing. It fixes the FormController component option mismatch that generated `option=com_inventory` and caused 404 errors when opening new/edit forms. All Inventory controllers now explicitly pin `com_xdecaroinventory`, and movement creation has an explicit ACL-aware `allowAdd()` path.
 
-Inventory 0.3.3 runtime fixes remain in place: the Beni and Movimenti list models use Joomla's supported application accessor, the Dashboard reads the installed Inventory version dynamically, and Core diagnostics can fall back to installed extension metadata when the Core runtime class is not autoloadable.
+The Web Asset Manager declaration is also corrected so Joomla resolves `media/com_xdecaroinventory/css/admin.css` through the component style URI `com_xdecaroinventory/admin.css`. Dashboard, list and form styling therefore use the same asset contract.
+
+Additional hardening in this patch includes:
+
+- consistent server-side `core.manage` checks on administration views;
+- action buttons and item edit links hidden when the matching Inventory ACL is missing;
+- `form.validate` enabled on item and movement forms;
+- UUID kept hidden and immutable after creation;
+- server-side whitelist validation for item type and state;
+- quantity input constrained to the `DECIMAL(14,3)` database range;
+- distinct prepared-statement placeholders for multi-column searches;
+- safe handling of unexpected movement-save errors with Joomla logging and a translated generic message;
+- localized dates, user names and explicit empty-list states;
+- broader Core by xdecaro version diagnostics covering library, component and current/legacy package identifiers.
 
 The 0.3.2 non-destructive self-healing migration remains in place and uses `CREATE TABLE IF NOT EXISTS` for `#__xdecaroinventory_items` and `#__xdecaroinventory_movements`.
 
