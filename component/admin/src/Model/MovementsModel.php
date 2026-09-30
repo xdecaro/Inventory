@@ -30,15 +30,22 @@ final class MovementsModel extends ListModel
                 'm.id','m.item_id','m.quantity_delta','m.reason','m.note','m.created','m.created_by',
                 $db->quoteName('i.name', 'item_name'),
                 $db->quoteName('i.sku', 'item_sku'),
+                $db->quoteName('u.name', 'user_name'),
             ])
             ->from($db->quoteName('#__xdecaroinventory_movements', 'm'))
-            ->join('INNER', $db->quoteName('#__xdecaroinventory_items', 'i') . ' ON ' . $db->quoteName('i.id') . ' = ' . $db->quoteName('m.item_id'));
+            ->join('INNER', $db->quoteName('#__xdecaroinventory_items', 'i') . ' ON ' . $db->quoteName('i.id') . ' = ' . $db->quoteName('m.item_id'))
+            ->join('LEFT', $db->quoteName('#__users', 'u') . ' ON ' . $db->quoteName('u.id') . ' = ' . $db->quoteName('m.created_by'));
 
         $search = trim((string) $this->getState('filter.search'));
         if ($search !== '') {
             $search = '%' . str_replace(' ', '%', $search) . '%';
-            $q->where('(' . $db->quoteName('m.reason') . ' LIKE :search OR ' . $db->quoteName('i.name') . ' LIKE :search OR ' . $db->quoteName('i.sku') . ' LIKE :search)')
-                ->bind(':search', $search, ParameterType::STRING);
+            $searchReason = $search;
+            $searchName = $search;
+            $searchSku = $search;
+            $q->where('(' . $db->quoteName('m.reason') . ' LIKE :search_reason OR ' . $db->quoteName('i.name') . ' LIKE :search_name OR ' . $db->quoteName('i.sku') . ' LIKE :search_sku)')
+                ->bind(':search_reason', $searchReason, ParameterType::STRING)
+                ->bind(':search_name', $searchName, ParameterType::STRING)
+                ->bind(':search_sku', $searchSku, ParameterType::STRING);
         }
 
         $item = (int) $this->getState('filter.item_id');
