@@ -9,17 +9,17 @@ function expectTrue(bool $condition, string $message): void {
     }
 }
 
-expectTrue(trim((string) file_get_contents($root . '/VERSION')) === '0.3.3', 'VERSION must be 0.3.3');
+expectTrue(trim((string) file_get_contents($root . '/VERSION')) === '0.3.4', 'VERSION must be 0.3.4');
 $component = (string) file_get_contents($root . '/component/xdecaroinventory.xml');
 $package = (string) file_get_contents($root . '/package/pkg_xdecaroinventory.xml');
 $updates = (string) file_get_contents($root . '/updates/pkg_xdecaroinventory.xml');
 $readme = (string) file_get_contents($root . '/README.md');
 $repairPath = $root . '/component/admin/sql/updates/mysql/0.3.2.sql';
-$markerPath = $root . '/component/admin/sql/updates/mysql/0.3.3.sql';
+$markerPath = $root . '/component/admin/sql/updates/mysql/0.3.4.sql';
 
-expectTrue(str_contains($component, '<version>0.3.3</version>'), 'component manifest version');
-expectTrue(str_contains($package, '<version>0.3.3</version>'), 'package manifest version');
-expectTrue(str_contains($updates, '<version>0.3.3</version>'), 'update server version');
+expectTrue(str_contains($component, '<version>0.3.4</version>'), 'component manifest version');
+expectTrue(str_contains($package, '<version>0.3.4</version>'), 'package manifest version');
+expectTrue(str_contains($updates, '<version>0.3.4</version>'), 'update server version');
 expectTrue(str_contains($component, '<targetplatform name="joomla" version="6.*"/>'), 'component must target Joomla 6 only');
 expectTrue(str_contains($package, '<targetplatform name="joomla" version="6.*"/>'), 'package must target Joomla 6 only');
 expectTrue(str_contains($updates, '<targetplatform name="joomla" version="6\\.[0-9]+"/>'), 'update server must target Joomla 6 only');
@@ -32,7 +32,7 @@ expectTrue(str_contains($component, 'view="items"'), 'items submenu missing');
 expectTrue(str_contains($component, 'view="movements"'), 'movements submenu missing');
 expectTrue(str_contains($component, 'xdecaro\\Component\\Inventory'), 'lowercase xdecaro namespace missing');
 expectTrue(is_file($repairPath), '0.3.2 self-healing SQL update missing');
-expectTrue(is_file($markerPath), '0.3.3 SQL update marker missing');
+expectTrue(is_file($markerPath), '0.3.4 SQL update marker missing');
 
 $repair = is_file($repairPath) ? (string) file_get_contents($repairPath) : '';
 foreach (['#__xdecaroinventory_items', '#__xdecaroinventory_movements'] as $table) {
