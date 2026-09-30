@@ -8,18 +8,18 @@ Joomla component for physical inventory and stock-domain data in the xdecaro eco
 - Package: `pkg_xdecaroinventory`
 - PHP namespace: `xdecaro\Component\Inventory`
 - Database tables: `#__xdecaroinventory_*`
-- Current prerelease line: `0.3.3`
+- Current prerelease line: `0.3.4`
 - Platform: **Joomla 6 only**
 - Runtime baseline: Joomla 6.1.3
 - PHP minimum: 8.3
 
 The vendor namespace is intentionally lowercase: `xdecaro`.
 
-## Inventory 0.3.3
+## Inventory 0.3.4
 
-Inventory 0.3.3 is a Joomla 6 runtime compatibility patch based on real Joomla 6.1.3 testing. It fixes the Beni and Movimenti list models so they obtain the application through Joomla's supported application accessor instead of calling an undefined `ListModel::getApplication()` method.
+Inventory 0.3.4 fixes a Joomla 6 Web Asset Manager runtime defect found during real testing. The Items, Item, Movements and Movement views previously chained `useStyle()` from `WebAssetRegistry`; Joomla 6 exposes `useStyle()` on `WebAssetManager`. All four views now register the component asset registry file and then enable `com_xdecaroinventory.admin` through the Web Asset Manager.
 
-The Dashboard now reads the installed Inventory version dynamically from Joomla extension metadata instead of hardcoding a release number. Core diagnostics also fall back to the installed Core library/package manifest version when the Core runtime class is not autoloadable; Core UI assets are still enabled only when the required Core API classes are actually available.
+Inventory 0.3.3 runtime fixes remain in place: the Beni and Movimenti list models use Joomla's supported application accessor, the Dashboard reads the installed Inventory version dynamically, and Core diagnostics can fall back to installed extension metadata when the Core runtime class is not autoloadable.
 
 The 0.3.2 non-destructive self-healing migration remains in place and uses `CREATE TABLE IF NOT EXISTS` for `#__xdecaroinventory_items` and `#__xdecaroinventory_movements`.
 
