@@ -1,6 +1,7 @@
 <?php
 namespace xdecaro\Component\Inventory\Administrator\View\Item;
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
@@ -13,6 +14,13 @@ final class HtmlView extends BaseHtmlView
 
     public function display($tpl = null): void
     {
+        $identity = Factory::getApplication()->getIdentity();
+
+        if (!$identity->authorise('core.manage', 'com_xdecaroinventory')
+            || !$identity->authorise('inventory.items.manage', 'com_xdecaroinventory')) {
+            throw new \RuntimeException(Text::_('JERROR_ALERTNOAUTHOR'), 403);
+        }
+
         $this->form = $this->get('Form');
         $this->item = $this->get('Item');
 
@@ -28,9 +36,9 @@ final class HtmlView extends BaseHtmlView
         ToolbarHelper::save('item.save');
         ToolbarHelper::cancel('item.cancel');
 
-        $wa = Factory::getApplication()->getDocument()->getWebAssetManager();
-        $wa->getRegistry()->addExtensionRegistryFile('com_xdecaroinventory');
+        $wa = $this->document->getWebAssetManager();
         $wa->useStyle('com_xdecaroinventory.admin');
+        $wa->useScript('form.validate');
 
         parent::display($tpl);
     }
