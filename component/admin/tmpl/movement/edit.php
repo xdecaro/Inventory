@@ -1,0 +1,3 @@
+<?php
+defined('_JEXEC') or die; use Joomla\CMS\HTML\HTMLHelper; use Joomla\CMS\Language\Text; use Joomla\CMS\Router\Route; ?>
+<form action="<?php echo Route::_('index.php?option=com_xdecaroinventory&view=movement&layout=edit'); ?>" method="post" name="adminForm" id="movement-form" class="form-validate xdecaroinventory-form"><div class="card"><div class="card-body"><p class="alert alert-info"><?php echo Text::_('COM_XDECAROINVENTORY_MOVEMENT_APPEND_ONLY_INFO'); ?></p><?php echo $this->form->renderFieldset('details'); ?></div></div><input type="hidden" name="task" value="movement.save"><?php echo HTMLHelper::_('form.token'); ?></form>

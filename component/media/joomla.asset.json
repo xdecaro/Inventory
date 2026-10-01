@@ -1,1 +1,13 @@
-{"$schema":"https://developer.joomla.org/schemas/json-schema/web_assets.json","name":"com_xdecaroinventory","version":"0.2.0","assets":[{"name":"com_xdecaroinventory.admin","type":"style","uri":"com_xdecaroinventory/css/admin.css"}]}
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "com_xdecaroinventory",
+  "version": "0.3.5",
+  "assets": [
+    {
+      "name": "com_xdecaroinventory.admin",
+      "type": "style",
+      "uri": "com_xdecaroinventory/admin.css",
+      "version": "0.3.5"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+-- Inventory 0.3.3
+-- Joomla 6 runtime compatibility patch; no database schema changes.

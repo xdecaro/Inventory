@@ -1,0 +1,2 @@
+-- Inventory 0.3.4
+-- Joomla 6 Web Asset Manager runtime compatibility patch; no database schema changes.
